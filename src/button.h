@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <string>
 
-// Легковесная замена RectF для чистого GDI
+// Lightweight stand-in for GDI+ RectF, avoiding the GDI+ dependency.
 struct Rect {
     int left, top, right, bottom;
     Rect(int l, int t, int r, int b) : left(l), top(t), right(r), bottom(b) {}

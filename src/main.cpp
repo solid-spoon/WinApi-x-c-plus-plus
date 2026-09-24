@@ -86,7 +86,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     RegisterClassExW(&wc);
 
-    // WS_EX_LAYERED удален, так как SetWindowRgn обеспечивает надежную форму без артефактов
+    // WS_EX_LAYERED is omitted because SetWindowRgn provides a reliable
+    // shape without visual artifacts.
     HWND hwnd = CreateWindowExW(
         WS_EX_TOPMOST | WS_EX_TOOLWINDOW, L"CustomDockPanelClass",
         L"Dock Panel", WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT, 800, 180, nullptr,
@@ -96,7 +97,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
 
-    // ѕримен€ем форму облака к окну
+    // Apply the cloud shape to the window.
     DockPanel temp_panel;
     temp_panel.Initialize();
     HRGN hCloudRgn = temp_panel.CreateCloudRegion();

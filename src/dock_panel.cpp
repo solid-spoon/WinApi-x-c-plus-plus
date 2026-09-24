@@ -145,6 +145,7 @@ void DockPanel::HandleTrayMessage(HWND hwnd, LPARAM lParam) {
         POINT pt;
         GetCursorPos(&pt);
         HMENU hMenu = CreatePopupMenu();
+        // NOTE: tray menu labels are user-facing UI strings and stay in Russian.
         AppendMenuW(hMenu, MF_STRING, 1, L"Развернуть панель");
         AppendMenuW(hMenu, MF_SEPARATOR, 0, nullptr);
         AppendMenuW(hMenu, MF_STRING, 2, L"Выход");
@@ -177,13 +178,13 @@ void DockPanel::Cleanup() {
 void DockPanel::DrawCloudShape(HDC hdc) const {
     HRGN hRgn = CreateCloudRegion();
 
-    // 1. Фон облака
+    // 1. Cloud background fill.
     HBRUSH hBgBrush = CreateSolidBrush(RGB(45, 45, 50));
     FillRgn(hdc, hRgn, hBgBrush);
     DeleteObject(hBgBrush);
 
-    // 2. Обводка облака
-    // FrameRgn рисует рамку по границе региона. 
+    // 2. Cloud outline.
+    // FrameRgn draws a frame along the region boundary.
     HBRUSH hFrameBrush = CreateSolidBrush(RGB(200, 200, 200));
     FrameRgn(hdc, hRgn, hFrameBrush, 2, 2);
     DeleteObject(hFrameBrush);
@@ -195,8 +196,8 @@ HRGN DockPanel::CreateCloudRegion() const {
     HRGN hRgn = CreateRectRgn(0, 0, 0, 0);
     HRGN hTemp;
 
-    // Собираем облако из перекрывающихся эллипсов и прямоугольного основания
-    // Координаты подобраны для аппроксимации исходного пути GraphicsPath (800x180)
+    // The cloud is composed of overlapping ellipses plus a rectangular base.
+    // Coordinates approximate the original GraphicsPath (800x180).
     hTemp = CreateEllipticRgn(20, 60, 150, 160);
     CombineRgn(hRgn, hRgn, hTemp, RGN_OR);
     DeleteObject(hTemp);
@@ -217,7 +218,7 @@ HRGN DockPanel::CreateCloudRegion() const {
     CombineRgn(hRgn, hRgn, hTemp, RGN_OR);
     DeleteObject(hTemp);
 
-    // Основание облака
+    // Cloud base.
     hTemp = CreateRectRgn(50, 100, 750, 175);
     CombineRgn(hRgn, hRgn, hTemp, RGN_OR);
     DeleteObject(hTemp);
