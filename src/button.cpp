@@ -84,7 +84,7 @@ void AppButton::Draw(HDC hdc) const {
         Rect hover_rect = bounds_;
         hover_rect.Inflate(12, 12);
         HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(DC_BRUSH));
-        SetDCBrushColor(hdc, RGB(230, 230, 230)); // Светлый фон для ховера
+        SetDCBrushColor(hdc, RGB(230, 230, 230)); // Light background for hover
         HPEN hOldPen = (HPEN)SelectObject(hdc, GetStockObject(NULL_PEN));
         Ellipse(hdc, hover_rect.left, hover_rect.top, hover_rect.right, hover_rect.bottom);
         SelectObject(hdc, hOldPen);
@@ -101,7 +101,7 @@ void AppButton::Draw(HDC hdc) const {
         DrawIconEx(hdc, icon_rect.left, icon_rect.top, hIcon_, icon_rect.Width(), icon_rect.Height(), 0, NULL, DI_NORMAL);
     }
     else {
-        // Фолбэк: рисуем круг с первой буквой
+        // Fallback: draw a circle with the first letter
         HBRUSH hBrush = CreateSolidBrush(RGB(100, 150, 255));
         HPEN hPen = CreatePen(PS_SOLID, 1, RGB(100, 150, 255));
         HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
@@ -131,10 +131,11 @@ void AppButton::Draw(HDC hdc) const {
 }
 
 void AppButton::LoadIcon() {
-    // Извлекаем иконку напрямую из целевого .exe файла (надежнее и красивее, чем загрузка PNG в чистом GDI)
+    // Extract the icon directly from the target .exe file
+    // (more reliable and nicer than loading a PNG in pure GDI).
     hIcon_ = ExtractIconW(nullptr, target_.c_str(), 0);
     if (!hIcon_) {
-        // Фолбэк: пытаемся загрузить как отдельный .ico файл
+        // Fallback: try to load it as a separate .ico file.
         hIcon_ = (HICON)LoadImageW(nullptr, icon_path_.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
     }
 }
